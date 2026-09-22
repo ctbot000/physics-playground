@@ -18,13 +18,12 @@ class NoCacheHandler(SimpleHTTPRequestHandler):
         super().end_headers()
 
     def send_head(self):
-        # Never answer 304: the conditional request is exactly what keeps a
-        # stale module alive across a reload.
-        self.headers.replace_header("If-Modified-Since", "") if "If-Modified-Since" in self.headers else None
-        if "If-None-Match" in self.headers:
-            del self.headers["If-None-Match"]
-        if "If-Modified-Since" in self.headers:
-            del self.headers["If-Modified-Since"]
+        # Never answer 304. A conditional request is exactly what keeps a stale
+        # module alive across a reload, so drop the validators before the base
+        # class gets a chance to honour them.
+        for header in ("If-Modified-Since", "If-None-Match"):
+            while header in self.headers:
+                del self.headers[header]
         return super().send_head()
 
     def log_message(self, fmt, *args):
