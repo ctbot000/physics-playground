@@ -1,0 +1,5 @@
+# Local agent state
+.claude/
+
+# Dependencies (the project has none, but keep this honest)
+node_modules/

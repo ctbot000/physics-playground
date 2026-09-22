@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Physics Playground</title>
+<meta name="description" content="A 2D rigid-body physics sandbox: drop shapes, tie them together, and watch them fall. No dependencies, no build step.">
+<meta name="color-scheme" content="dark">
+<meta property="og:title" content="Physics Playground">
+<meta property="og:description" content="A 2D rigid-body physics sandbox in a single page. Drop shapes, tie them together, watch them fall.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='11' cy='12' r='7' fill='%23f97362'/%3E%3Crect x='14' y='16' width='13' height='13' rx='2' fill='%235aa9e6'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <h1><span class="wordmark-long">Physics&nbsp;Playground</span><span class="wordmark-short">Physics</span></h1>
+    <div class="topbar-actions">
+      <button id="btn-play" class="btn primary" type="button" aria-pressed="false">Pause</button>
+      <button id="btn-step" class="btn" type="button" title="Advance one frame (period)">Step</button>
+      <button id="btn-reset" class="btn" type="button" title="Rebuild the scene (R)">Reset</button>
+      <button id="btn-panel" class="btn panel-toggle" type="button" aria-expanded="false" aria-controls="panel">Controls</button>
+    </div>
+  </header>
+
+  <aside class="panel" id="panel">
+    <section class="group">
+      <h2>Scene</h2>
+      <div class="scene-grid" id="scene-list"></div>
+      <p class="hint" id="scene-hint"></p>
+    </section>
+
+    <section class="group">
+      <h2>Tool</h2>
+      <div class="tool-grid" id="tool-list"></div>
+      <p class="hint" id="tool-hint"></p>
+    </section>
+
+    <section class="group">
+      <h2>Physics</h2>
+      <label class="slider">
+        <span>Gravity<output id="out-gravity"></output></span>
+        <input type="range" id="in-gravity" min="-1600" max="2400" step="25" value="900">
+      </label>
+      <label class="slider">
+        <span>Bounciness<output id="out-restitution"></output></span>
+        <input type="range" id="in-restitution" min="0" max="0.98" step="0.02" value="0.2">
+      </label>
+      <label class="slider">
+        <span>Friction<output id="out-friction"></output></span>
+        <input type="range" id="in-friction" min="0" max="1" step="0.02" value="0.45">
+      </label>
+      <label class="slider">
+        <span>Time scale<output id="out-timescale"></output></span>
+        <input type="range" id="in-timescale" min="0.05" max="2" step="0.05" value="1">
+      </label>
+      <label class="slider">
+        <span>Solver iterations<output id="out-iterations"></output></span>
+        <input type="range" id="in-iterations" min="2" max="30" step="1" value="10">
+      </label>
+    </section>
+
+    <section class="group">
+      <h2>Show</h2>
+      <div class="toggles">
+        <label class="toggle"><input type="checkbox" id="tg-grid" checked><span>Grid</span></label>
+        <label class="toggle"><input type="checkbox" id="tg-trails"><span>Trails</span></label>
+        <label class="toggle"><input type="checkbox" id="tg-contacts"><span>Contacts</span></label>
+        <label class="toggle"><input type="checkbox" id="tg-aabb"><span>Bounds</span></label>
+        <label class="toggle"><input type="checkbox" id="tg-velocities"><span>Velocity</span></label>
+        <label class="toggle"><input type="checkbox" id="tg-stats" checked><span>Stats</span></label>
+      </div>
+    </section>
+
+    <section class="group">
+      <h2>Shortcuts</h2>
+      <dl class="keys">
+        <dt>Space</dt><dd>pause / resume</dd>
+        <dt>.</dt><dd>single step</dd>
+        <dt>R</dt><dd>reset scene</dd>
+        <dt>1 – 9</dt><dd>pick tool</dd>
+        <dt>Backspace</dt><dd>clear loose bodies</dd>
+        <dt>G</dt><dd>flip gravity</dd>
+      </dl>
+    </section>
+
+    <footer class="panel-footer">
+      <a href="https://github.com/ctbot000/physics-playground">Source on GitHub</a>
+    </footer>
+  </aside>
+
+  <main class="stage" id="stage">
+    <canvas id="canvas" aria-label="Physics simulation canvas"></canvas>
+    <div class="stats" id="stats" hidden>
+      <span><b id="stat-fps">--</b> fps</span>
+      <span><b id="stat-bodies">0</b> bodies</span>
+      <span><b id="stat-contacts">0</b> contacts</span>
+      <span><b id="stat-joints">0</b> joints</span>
+      <span><b id="stat-step">0.0</b> ms/step</span>
+    </div>
+    <div class="paused-badge" id="paused-badge" hidden>Paused</div>
+  </main>
+</div>
+<script type="module" src="src/app.js"></script>
+<noscript><p style="padding:2rem;color:#e6ebf5">This playground needs JavaScript.</p></noscript>
+</body>
+</html>
